@@ -1,0 +1,54 @@
+- Compilazione:
+    Il progetto e compilabile sia con CMake 17 che con versioni precedenti, come 13 o 11.
+    Per compilare in 13 basta modificare i seguenti file.
+    
+    @ CMakeLists.txt:
+        + Sostituire la riga 'set(CMAKE_CXX_STANDARD 17)' con il valore di cmake da usare per compilare.
+        e.g. set(CMAKE_CXX_STANDARD 13) => per versione 13.
+    @ clutster_extraction.cpp
+        + Commentare le porzioni di codice di CMake 17 e abilitare quelle di 13
+        CMake 17:
+            /*
+            CMake 17
+            */
+            #include <filesystem>
+            namespace fs = std::filesystem;
+
+            ...
+
+            /*
+            CMake 17
+            */
+            std::vector<fs::path> stream;
+            for (const auto& entry : fs::directory_iterator("/home/andreatirelli/Developments/platform/perception/assignment_1/dataset_1/")) {
+                stream.push_back(entry.path());
+            }
+        
+        CMake 13:
+            /*
+            CMake 13
+            */
+            std::vector<boost::filesystem::path> stream(boost::filesystem::directory_iterator{"/home/andreatirelli/Developments/platform/perception/assignment_1/dataset_1/"},
+                                                    boost::filesystem::directory_iterator{});
+            
+- Obiettivo 5:
+Nel file 'objective_5.txt' puo trovare una breve spiegazione che ho fornito per il punto 5.
+Spiegando in breve i fenomeni che mi sono capitati e una eventuale approccio teorico per affrontare
+il problema.
+
+- Miglioramenti che si potevano fare:
+    + passare come argomento la path del dataset_X
+    + passare come argomenti:
+        - Leaf (x, y, z)
+        - Threshold
+        - Tolerance
+    + dividere i funzioni i vari blochi di:
+        - downsample
+        - segmentation
+        - clustering
+    + rilevamento di prossimita, punto 3:
+        + aggiungere alla posizione front e back la lunghezza della macchina.
+        Questo perche mi sono accorto che la scena fa riferimento sul punto (0,0,0)
+        ma cio non rispecchia la realta, infatti a mio parere dovremmo tenere in
+        considerazione la lunghezza del veicolo, perche sono i punti x_min e x_max
+        che determinano la distanza di 5m, cosi e come se fosse 5m - lunghezza_avgEgo.

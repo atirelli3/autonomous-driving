@@ -1,0 +1,26 @@
+La soluzione col dataset2, funziona ma in parte.
+Lasciando stare l'aspetto delle performace del viewer, perche principalmente la soluzione
+riscontra problemi quando il veiocolo ego effettua la svolta a destra; presumo per via del
+valore di Threshold che ho usato.
+
+Il problema principale si verifica nella identificazione dei singoli cluster.
+Non e precisa e fonde dentro un unico cluster piu oggetti.
+La mia ipotesi e che per via della angolazione della scena e dal movimento del veicolo (in particolare
+la svolta a destra), gli oggetti vengono visti da punti di diversi a ogni frame, quindi questo
+porta ad avere casi dove gli oggetti si avvicinano o si sovrappongono, portando quindi ad avere i punti
+di due cluster diversi, ragruppati in un unico cluster e quindi perdere l'informazione del singolo oggetto
+e del contesto globale della scena.
+
+Una soluzione potrebbe essere protrebbe essere quella di sfruttare l'angolazione del lidar per prendere solo
+una parte della scena, in modo tecnico limitare il suo FOV e quindi avere una singola scena piu dettagliata
+ma con meno campo visivo. Questo vincolo potrebbe essere superato se si montano altri lidar che compensano a
+vicenda i rispettivi FOV limitati.
+
+Pensiero delle 22:42.
+L'aproccio proposto non fa uso della object traking, ma semplicemente limitando il FOV.
+Se si vuole mantenere il FOV massimo del lidar, con le ultime nozioni proporrei anche un
+approccio orientato all'implementazione di object traking sui cluster nella scena.
+Quando un cluster sparisce dalla scena, per via della sovrapposizione di due oggetti dovuti
+dal movimento del veiocolo ego o dalla angolazione esterna e non centrare (in base al veiocolo ego)
+della sensore, il cluster viene eliminanto, facendo cio si potrebbe rimuovere il problema della
+aggregazione di piu cluster.
